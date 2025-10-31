@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Box, Button, TextField } from '@mui/material'
 import {
@@ -5,11 +6,13 @@ import {
     checkIsAuthenticated,
     editAuthInfo,
 } from '@homehub/react-utils'
+import Parcel from 'single-spa-react/parcel'
 
 type FormData = Omit<typeof AuthInfo, 'authId'>
 
 const EditProfileForm = () => {
     const { authInfo } = checkIsAuthenticated()
+    const [isVisible, setIsVisible] = useState<boolean>(false)
 
     const {
         register,
@@ -36,7 +39,6 @@ const EditProfileForm = () => {
                 py: 2,
                 width: '100%',
             }}
-            onSubmit={handleSubmit(onSubmit)}
         >
             <TextField
                 id="email"
@@ -71,11 +73,28 @@ const EditProfileForm = () => {
             <Button
                 variant="contained"
                 size="large"
-                type="submit"
                 sx={{ bgcolor: '#9C27B0' }}
+                onClick={() => setIsVisible(true)}
             >
                 Editar Perfil
             </Button>
+            {isVisible && (
+                <Parcel
+                    config={() =>
+                        import(
+                            /* webpackIgnore: true */ // @ts-ignore-next
+                            '@homehub/react-parcel'
+                        )
+                    }
+                    title="HomeHub"
+                    description="Confirmar as alterações?"
+                    leftBtnText="Cancelar"
+                    rightBtnText="Confirmar"
+                    leftBtnAction={() => setIsVisible(false)}
+                    rightBtnAction={handleSubmit(onSubmit)}
+                    isVisible={isVisible}
+                />
+            )}
         </Box>
     )
 }
