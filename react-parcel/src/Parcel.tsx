@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef } from 'react'
 import {
     Button,
     Dialog,
@@ -38,25 +38,13 @@ const Parcel = ({
     rightBtnAction,
     isVisible,
 }: ParcelProps) => {
-    const [open, setOpen] = useState<boolean>(isVisible)
-
-    const leftBtnHandler = () => {
-        leftBtnAction()
-        setOpen(false)
-    }
-
-    const rightBtnHandler = () => {
-        rightBtnAction()
-        setOpen(false)
-    }
-
     return (
         <Dialog
-            open={open}
+            open={isVisible}
             slots={{
                 transition: Transition,
             }}
-            onClose={() => setOpen(false)}
+            onClose={leftBtnAction}
             aria-describedby="alert-dialog-slide-description"
         >
             <DialogTitle>{title}</DialogTitle>
@@ -66,8 +54,8 @@ const Parcel = ({
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={leftBtnHandler}>{leftBtnText}</Button>
-                <Button onClick={rightBtnHandler}>{rightBtnText}</Button>
+                <Button onClick={leftBtnAction}>{leftBtnText}</Button>
+                <Button onClick={rightBtnAction}>{rightBtnText}</Button>
             </DialogActions>
         </Dialog>
     )
