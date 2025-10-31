@@ -24,6 +24,9 @@ interface ParcelProps {
     description: string
     leftBtnText: string
     rightBtnText: string
+    leftBtnAction: () => void
+    rightBtnAction: () => void
+    isVisible: boolean
 }
 
 const Parcel = ({
@@ -31,14 +34,19 @@ const Parcel = ({
     description,
     leftBtnText,
     rightBtnText,
+    leftBtnAction,
+    rightBtnAction,
+    isVisible,
 }: ParcelProps) => {
-    const [open, setOpen] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(isVisible)
 
-    const handleClickOpen = () => {
-        setOpen(true)
+    const leftBtnHandler = () => {
+        leftBtnAction()
+        setOpen(false)
     }
 
-    const handleClose = () => {
+    const rightBtnHandler = () => {
+        rightBtnAction()
         setOpen(false)
     }
 
@@ -48,8 +56,7 @@ const Parcel = ({
             slots={{
                 transition: Transition,
             }}
-            keepMounted
-            onClose={handleClose}
+            onClose={() => setOpen(false)}
             aria-describedby="alert-dialog-slide-description"
         >
             <DialogTitle>{title}</DialogTitle>
@@ -59,8 +66,8 @@ const Parcel = ({
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>{leftBtnText}</Button>
-                <Button onClick={handleClose}>{rightBtnText}</Button>
+                <Button onClick={leftBtnHandler}>{leftBtnText}</Button>
+                <Button onClick={rightBtnHandler}>{rightBtnText}</Button>
             </DialogActions>
         </Dialog>
     )
