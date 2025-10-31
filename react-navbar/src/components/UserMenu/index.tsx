@@ -7,15 +7,21 @@ import {
     Typography,
 } from '@mui/material'
 import { Logout, Person, Settings } from '@mui/icons-material'
-import { AuthInfo, logoutFunction } from '@homehub/react-utils'
+import { AuthInfo } from '@homehub/react-utils'
 
 interface UserMenuProps {
     anchorEl: null | HTMLElement
     onClose: () => void
     authInfo: typeof AuthInfo
+    onLogoutClick: () => void
 }
 
-const UserMenu = ({ anchorEl, onClose, authInfo }: UserMenuProps) => {
+const UserMenu = ({
+    anchorEl,
+    onClose,
+    authInfo,
+    onLogoutClick,
+}: UserMenuProps) => {
     const isMenuOpen = Boolean(anchorEl)
 
     const menuItems = [
@@ -33,7 +39,7 @@ const UserMenu = ({ anchorEl, onClose, authInfo }: UserMenuProps) => {
         {
             label: 'Sair',
             icon: <Logout />,
-            onClick: logoutFunction,
+            onClick: onLogoutClick,
             divider: true,
         },
     ]
