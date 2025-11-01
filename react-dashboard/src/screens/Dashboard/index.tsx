@@ -3,6 +3,7 @@ import { checkIsAuthenticated } from '@homehub/react-utils'
 import HeroCard from '../../components/HeroCard'
 import UsersCard from '../../components/UsersCard'
 import WaterCard from '../../components/WaterCard'
+import ReminderCard from '../../components/ReminderCard'
 
 const Dashboard = () => {
     const { authInfo } = checkIsAuthenticated()
@@ -40,6 +41,9 @@ const Dashboard = () => {
                 </Grid>
                 <Grid size={4}>
                     <WaterCard />
+                </Grid>
+                <Grid size={4}>
+                    <ReminderCard />
                 </Grid>
             </Grid>
         </Box>
