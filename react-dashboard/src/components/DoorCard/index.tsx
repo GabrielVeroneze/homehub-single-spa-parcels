@@ -9,15 +9,31 @@ import {
     InputLabel,
     MenuItem,
     Select,
+    Snackbar,
     Typography,
 } from '@mui/material'
 import DoorIcon from '../../assets/door.png'
 
 const DoorCard = () => {
-    const [selectedDoor, setSelectedDoor] = useState({
-        door: 'entrada',
-        isOpen: false,
+    const [doors, setDoors] = useState({
+        entrada: false,
+        serviço: false,
+        lateral: false,
+        garagem: false,
     })
+
+    const [selectedDoor, setSelectedDoor] = useState('entrada')
+    const [isSnackbarVisible, setIsSnackbarVisible] = useState<boolean>(false)
+
+    const handleDoorAction = (isOpen: boolean) => {
+        setDoors((prev) => ({
+            ...prev,
+            [selectedDoor]: isOpen,
+        }))
+        setIsSnackbarVisible(true)
+    }
+
+    const currentIsOpen = doors[selectedDoor]
 
     return (
         <Card sx={{ backgroundColor: '#F5F5F5', height: '100%' }}>
@@ -43,18 +59,16 @@ const DoorCard = () => {
                         <Select
                             labelId="simple-select-label"
                             id="simple-select"
-                            value={selectedDoor.door}
+                            value={selectedDoor}
                             label="Porta"
                             onChange={({ target }) =>
-                                setSelectedDoor({
-                                    ...selectedDoor,
-                                    door: target.value.toString(),
-                                })
+                                setSelectedDoor(target.value.toString())
                             }
                         >
                             <MenuItem value="entrada">Entrada</MenuItem>
                             <MenuItem value="serviço">Serviço</MenuItem>
                             <MenuItem value="lateral">Lateral</MenuItem>
+                            <MenuItem value="garagem">Garagem</MenuItem>
                         </Select>
                     </FormControl>
                     <Box
@@ -67,9 +81,13 @@ const DoorCard = () => {
                     >
                         <img src={DoorIcon} alt="Ícone de Porta" width={100} />
                         <Chip
-                            label="Destrancada"
+                            label={currentIsOpen ? 'Destrancada' : 'Trancada'}
                             size="medium"
-                            sx={{ color: '#FFFFFF', bgcolor: '#EF5350' }}
+                            sx={{
+                                color: '#FFFFFF',
+                                bgcolor: '#EF5350',
+                                width: 100,
+                            }}
                         />
                     </Box>
                     <Box
@@ -88,12 +106,7 @@ const DoorCard = () => {
                                 borderColor: '#0000001F',
                                 bgcolor: 'transparent',
                             }}
-                            onClick={() =>
-                                setSelectedDoor({
-                                    ...selectedDoor,
-                                    isOpen: true,
-                                })
-                            }
+                            onClick={() => handleDoorAction(true)}
                         >
                             Abrir
                         </Button>
@@ -103,18 +116,23 @@ const DoorCard = () => {
                             sx={{
                                 backgroundColor: '#9C27B0',
                             }}
-                            onClick={() =>
-                                setSelectedDoor({
-                                    ...selectedDoor,
-                                    isOpen: false,
-                                })
-                            }
+                            onClick={() => handleDoorAction(false)}
                         >
                             Trancar
                         </Button>
                     </Box>
                 </Box>
             </CardContent>
+            {isSnackbarVisible && (
+                <Snackbar
+                    open={isSnackbarVisible}
+                    autoHideDuration={2000}
+                    onClose={() => setIsSnackbarVisible(false)}
+                    message={`Porta ${selectedDoor} ${
+                        currentIsOpen ? 'aberta' : 'trancada'
+                    }.`}
+                />
+            )}
         </Card>
     )
 }
