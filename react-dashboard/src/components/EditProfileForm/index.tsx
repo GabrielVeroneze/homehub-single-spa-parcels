@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, Snackbar, TextField } from '@mui/material'
 import {
     AuthInfo,
     checkIsAuthenticated,
@@ -13,6 +13,7 @@ type FormData = Omit<typeof AuthInfo, 'authId'>
 const EditProfileForm = () => {
     const { authInfo } = checkIsAuthenticated()
     const [isVisible, setIsVisible] = useState<boolean>(false)
+    const [isSnackbarVisible, setIsSnackbarVisible] = useState<boolean>(false)
 
     const {
         register,
@@ -27,6 +28,9 @@ const EditProfileForm = () => {
             ...data,
             authId: authInfo.authId,
         })
+
+        setIsVisible(false)
+        setIsSnackbarVisible(true)
     }
 
     return (
@@ -93,6 +97,14 @@ const EditProfileForm = () => {
                     leftBtnAction={() => setIsVisible(false)}
                     rightBtnAction={handleSubmit(onSubmit)}
                     isVisible={isVisible}
+                />
+            )}
+            {isSnackbarVisible && (
+                <Snackbar
+                    open={isSnackbarVisible}
+                    autoHideDuration={2000}
+                    onClose={() => setIsSnackbarVisible(false)}
+                    message="Usuário editado com sucesso."
                 />
             )}
         </Box>
