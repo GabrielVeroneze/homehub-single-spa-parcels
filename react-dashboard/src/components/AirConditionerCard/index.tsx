@@ -6,6 +6,7 @@ import {
     CardContent,
     MobileStepper,
     Slider,
+    Snackbar,
     Typography,
 } from '@mui/material'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
@@ -27,6 +28,9 @@ const valuetext = (value: number) => {
 
 const AirConditionerCard = () => {
     const [activeStep, setActiveStep] = useState(0)
+    const [isOn, setIsOn] = useState<boolean>(true)
+    const [isSnackbarVisible, setIsSnackbarVisible] = useState<boolean>(false)
+
     const maxSteps = 4
 
     const handleNext = () => {
@@ -59,9 +63,17 @@ const AirConditionerCard = () => {
                     <Button
                         variant="outlined"
                         size="large"
-                        sx={{ color: '#9C27B0', borderColor: '#9C27B0' }}
+                        sx={{
+                            color: '#9C27B0',
+                            borderColor: '#9C27B0',
+                            width: 120,
+                        }}
+                        onClick={() => {
+                            setIsOn(!isOn)
+                            setIsSnackbarVisible(true)
+                        }}
                     >
-                        Desligar
+                        {isOn ? 'Desligar' : 'Ligar'}
                     </Button>
                 </Box>
                 <Box
@@ -132,6 +144,14 @@ const AirConditionerCard = () => {
                     />
                 </Box>
             </CardContent>
+            {isSnackbarVisible && (
+                <Snackbar
+                    open={isSnackbarVisible}
+                    autoHideDuration={2000}
+                    onClose={() => setIsSnackbarVisible(false)}
+                    message={`Ar-condicionado ${isOn ? 'ligado' : 'desligado'}.`}
+                />
+            )}
         </Card>
     )
 }
